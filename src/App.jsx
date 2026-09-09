@@ -5,14 +5,14 @@ const architectures = [
     id: 'soap',
     name: 'SOAP',
     year: 'W3C 2000 / 2003',
-    tag: 'RPC doanh nghiệp',
+    tag: 'Doanh nghiệp / WS-Security',
     color: 'from-sky-600 to-cyan-500',
     accent: 'border-sky-200 bg-sky-50 text-sky-950',
     oneLine:
-      'Gói lời gọi trong XML Envelope, hợp đồng WSDL chặt, mạnh khi cần bảo mật ở tầng thông điệp.',
-    bestFor: 'Ngân hàng, bảo hiểm, ERP, cổng chính phủ, đối tác bắt buộc SOAP.',
+      'Đóng gói request trong XML Envelope, định nghĩa WSDL chặt chẽ, tối ưu cho bảo mật tầng thông điệp (WS-Security).',
+    bestFor: 'Tích hợp hệ thống ngân hàng, bảo hiểm, ERP, dịch vụ công hoặc kết nối đối tác quy định chuẩn SOAP.',
     tradeoff:
-      'XML nặng, WSDL cứng, độ phức tạp WS-* cao và không thân thiện với frontend hiện đại.',
+      'Payload XML cồng kềnh, cấu hình WS-* phức tạp, WSDL thiếu linh hoạt và không tối ưu cho Web/Mobile frontend.',
     requestTitle: 'SOAP request',
     request: `<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"
   xmlns:sms="http://sms.university.edu.vn/">
@@ -35,20 +35,24 @@ const architectures = [
     </sms:GetStudentResponse>
   </soap:Body>
 </soap:Envelope>`,
-    bullets: ['XML Envelope: Header + Body', 'WSDL bắt buộc và có thể sinh code', 'Lỗi trả về bằng soap:Fault'],
+    bullets: [
+      'Cấu trúc XML Envelope chuẩn (Header + Body)',
+      'Bắt buộc dùng WSDL để sinh code & kiểm tra dữ liệu',
+      'Phản hồi lỗi chuẩn qua thẻ <soap:Fault>',
+    ],
   },
   {
     id: 'rest',
     name: 'REST',
     year: 'Fielding 2000',
-    tag: 'Tài nguyên + HTTP',
+    tag: 'Resource-Based (HTTP)',
     color: 'from-emerald-600 to-teal-500',
     accent: 'border-emerald-200 bg-emerald-50 text-emerald-950',
     oneLine:
-      'Mọi thứ là tài nguyên có URI; client dùng GET, POST, PUT, PATCH, DELETE và tận dụng cache HTTP.',
-    bestFor: 'API công khai, web app, CRUD rõ ràng, đội mỏng cần dễ bàn giao.',
+      'Quản lý tài nguyên qua URI, sử dụng chuẩn phương thức HTTP (GET, POST, PUT, DELETE) và tận dụng HTTP caching.',
+    bestFor: 'Public API, web/mobile app tiêu chuẩn, dịch vụ CRUD và dự án cần tích hợp nhanh chóng, dễ bảo trì.',
     tradeoff:
-      'Có thể over-fetch, under-fetch và không có streaming sẵn; OpenAPI chỉ hữu ích nếu được giữ đồng bộ.',
+      'Dễ gặp sự cố over-fetching hoặc under-fetching; cần chủ động bảo trì tài liệu hợp đồng OpenAPI.',
     requestTitle: 'REST request',
     request: `GET /api/v1/students/SE181234/enrollments?term=FA26 HTTP/1.1
 Host: sms.university.edu.vn
@@ -72,20 +76,24 @@ Cache-Control: private, max-age=60
     { "subjectCode": "EXE101", "grade": null, "status": "IN_PROGRESS" }
   ]
 }`,
-    bullets: ['GET an toàn và cache được', 'ETag giúp trả 304 khi dữ liệu chưa đổi', 'OpenAPI mô tả hợp đồng API'],
+    bullets: [
+      'Phương thức GET an toàn và hỗ trợ caching tốt',
+      'Sử dụng ETag (304 Not Modified) để tiết kiệm băng thông',
+      'Chuẩn hóa tài liệu hợp đồng bằng OpenAPI / Swagger',
+    ],
   },
   {
     id: 'graphql',
     name: 'GraphQL',
     year: 'Facebook 2015',
-    tag: 'Client tự chọn dữ liệu',
+    tag: 'Client-Driven Queries',
     color: 'from-fuchsia-600 to-rose-500',
     accent: 'border-fuchsia-200 bg-fuchsia-50 text-fuchsia-950',
     oneLine:
-      'Một endpoint, client gửi query mô tả đúng cây dữ liệu cần nhận, server trả về đúng hình dạng đó.',
-    bestFor: 'Mobile app, nhiều loại client, BFF hoặc lớp gom dữ liệu.',
+      'Chỉ dùng một endpoint duy nhất, client tự truy vấn chính xác các trường dữ liệu cần thiết và nhận kết quả tương ứng.',
+    bestFor: 'Ứng dụng mobile, hệ thống đa nền tảng (multi-client), mô hình BFF (Backend-for-Frontend) hoặc tích hợp tổng hợp dữ liệu.',
     tradeoff:
-      'Cache HTTP kém, lỗi thường nằm trong body, server phải chống query quá sâu và vấn đề N+1.',
+      'Khó tận dụng HTTP cache, lỗi thường nằm trong response body (HTTP 200), cần giải quyết bài toán N+1 query.',
     requestTitle: 'GraphQL query',
     request: `POST /graphql
 
@@ -114,20 +122,24 @@ query GetStudentResult {
     }
   }
 }`,
-    bullets: ['Schema SDL kiểm kiểu mạnh', 'Query/mutation/subscription', 'DataLoader giúp giảm N+1'],
+    bullets: [
+      'Định nghĩa Schema SDL chặt chẽ với strong-typing',
+      'Hỗ trợ Query (đọc), Mutation (ghi) và Subscription (realtime)',
+      'Tối ưu hiệu năng N+1 bằng cơ chế DataLoader',
+    ],
   },
   {
     id: 'grpc',
     name: 'gRPC',
     year: 'Google 2016',
-    tag: 'RPC nhanh nội bộ',
+    tag: 'High-Performance RPC',
     color: 'from-indigo-600 to-violet-500',
     accent: 'border-indigo-200 bg-indigo-50 text-indigo-950',
     oneLine:
-      'Định nghĩa service bằng .proto, sinh client/server nhiều ngôn ngữ, truyền Protocol Buffers qua HTTP/2.',
-    bestFor: 'Microservices nội bộ, IoT, realtime, streaming hai chiều, thông lượng cao.',
+      'Định nghĩa service qua file .proto, tự sinh code client/server đa ngôn ngữ, truyền tải dữ liệu nhị phân Protocol Buffers qua HTTP/2.',
+    bestFor: 'Giao tiếp nội bộ giữa các microservices, ứng dụng realtime, IoT, streaming 2 chiều và đòi hỏi hiệu năng cao.',
     tradeoff:
-      'Trình duyệt không gọi trực tiếp; cần gRPC-Web + proxy, ít lợi thế cache HTTP và khó đọc bằng mắt.',
+      'Trình duyệt không hỗ trợ trực tiếp (cần gRPC-Web & proxy), payload nhị phân khó đọc debug thủ công.',
     requestTitle: 'gRPC proto',
     request: `syntax = "proto3";
 package sms.v1;
@@ -140,66 +152,70 @@ service StudentService {
 message GetStudentRequest {
   string student_code = 1;
 }`,
-    responseTitle: 'Message sau khi deserialize',
+    responseTitle: 'Phản hồi sau khi Deserialize',
     response: `Student {
   student_code: "SE181234"
   full_name: "Nguyen Van An"
   gpa: 3.42
 }
 
-// Trên wire là binary Protocol Buffers,
-// nhỏ hơn JSON và phù hợp gọi nội bộ tốc độ cao.`,
-    bullets: ['HTTP/2 multiplexing và streaming', '.proto bắt buộc, sinh code', 'Tốt cho backend-to-backend'],
+// Dữ liệu truyền trên mạng (wire format) là nhị phân Protocol Buffers,
+// kích thước nhỏ hơn nhiều so với JSON và tối ưu cho giao tiếp nội bộ.`,
+    bullets: [
+      'Tận dụng tối đa HTTP/2 Multiplexing & Streaming',
+      'Khai báo bằng .proto để tự động sinh SDK client/server',
+      'Tối ưu xuất sắc cho kết nối Backend-to-Backend',
+    ],
   },
 ]
 
 const comparisonRows = [
-  ['Giao thức', 'HTTP/SMTP/TCP/JMS', 'HTTP/1.1, HTTP/2, HTTP/3', 'HTTP, thường POST /graphql', 'HTTP/2'],
-  ['Định dạng', 'XML Envelope', 'JSON phổ biến', 'JSON', 'Protocol Buffers binary'],
-  ['Giao diện', 'RPC theo thao tác', 'Tài nguyên + verb HTTP', 'Query theo schema', 'RPC theo method'],
-  ['Hợp đồng', 'WSDL bắt buộc', 'OpenAPI tùy chọn', 'SDL bắt buộc', '.proto bắt buộc'],
-  ['Cache', 'Kém, thường POST', 'Rất tốt: ETag, CDN', 'Kém ở tầng HTTP', 'Tự làm ở app layer'],
-  ['Trình duyệt', 'Gọi được nhưng nặng', 'fetch() là đủ', 'Gọi tự nhiên bằng POST', 'Cần gRPC-Web + proxy'],
+  ['Giao thức', 'HTTP / SMTP / TCP / JMS', 'HTTP/1.1, HTTP/2, HTTP/3', 'HTTP (thường dùng POST)', 'HTTP/2'],
+  ['Định dạng dữ liệu', 'XML Envelope', 'JSON (phổ biến) / XML', 'JSON', 'Protocol Buffers (Binary)'],
+  ['Mô hình giao tiếp', 'RPC theo thao tác (Action-based)', 'Tài nguyên + HTTP Verbs (Resource-based)', 'Truy vấn theo Schema (Query-based)', 'RPC theo phương thức (Method-based)'],
+  ['Định nghĩa hợp đồng (Contract)', 'WSDL (Bắt buộc)', 'OpenAPI / Swagger (Tùy chọn)', 'GraphQL Schema / SDL (Bắt buộc)', '.proto File (Bắt buộc)'],
+  ['Cơ chế Caching', 'Hạn chế (thường dùng POST)', 'Rất tốt (ETag, HTTP Cache Headers, CDN)', 'Hạn chế ở tầng HTTP', 'Tự xử lý ở tầng Application'],
+  ['Hỗ trợ Browser', 'Phức tạp, payload nặng', 'Hỗ trợ trực tiếp (fetch / axios)', 'Hỗ trợ trực tiếp qua HTTP POST', 'Cần gRPC-Web và Proxy (Envoy)'],
 ]
 
 const constraints = [
   {
     id: 'client',
-    label: 'Client chính',
+    label: 'Đối tượng Client chính',
     options: [
-      { label: 'Web/public API', value: 'rest' },
-      { label: 'Nhiều app cần data khác nhau', value: 'graphql' },
-      { label: 'Service nội bộ', value: 'grpc' },
-      { label: 'Đối tác legacy', value: 'soap' },
+      { label: 'Ứng dụng Web / Public API', value: 'rest' },
+      { label: 'Đa nền tảng, nhu cầu dữ liệu linh hoạt', value: 'graphql' },
+      { label: 'Giao tiếp giữa các Service nội bộ', value: 'grpc' },
+      { label: 'Hệ thống đối tác cũ (Legacy)', value: 'soap' },
     ],
   },
   {
     id: 'network',
-    label: 'Mạng chạy API',
+    label: 'Môi trường mạng',
     options: [
-      { label: 'Internet công cộng', value: 'rest' },
-      { label: 'Mobile yếu, ít round-trip', value: 'graphql' },
-      { label: 'Nội bộ latency thấp', value: 'grpc' },
-      { label: 'Nhiều chặng trung gian', value: 'soap' },
+      { label: 'Internet công cộng (Public Internet)', value: 'rest' },
+      { label: 'Mạng di động / Cần tối ưu số lần round-trip', value: 'graphql' },
+      { label: 'Mạng nội bộ (Intranet) độ trễ thấp', value: 'grpc' },
+      { label: 'Giao dịch qua nhiều chặng trung gian', value: 'soap' },
     ],
   },
   {
     id: 'contract',
-    label: 'Kiểu hợp đồng',
+    label: 'Yêu cầu Hợp đồng (Contract)',
     options: [
-      { label: 'Dễ đọc, dễ bàn giao', value: 'rest' },
-      { label: 'Schema query linh hoạt', value: 'graphql' },
-      { label: 'Codegen bắt buộc', value: 'grpc' },
-      { label: 'Ký số từng thông điệp', value: 'soap' },
+      { label: 'Đơn giản, dễ đọc, dễ tích hợp', value: 'rest' },
+      { label: 'Schema linh hoạt, client tự chọn field', value: 'graphql' },
+      { label: 'Bắt buộc tự động sinh code (Codegen)', value: 'grpc' },
+      { label: 'Bảo mật nghiêm ngặt, ký số thông điệp', value: 'soap' },
     ],
   },
 ]
 
 const myths = [
-  ['gRPC nhanh nhất nên luôn tốt nhất', 'Nhanh trong mạng nội bộ. Ra Internet công cộng, proxy, cache và CDN có thể quan trọng hơn vài chục mili-giây.'],
-  ['REST nghĩa là JSON qua HTTP', 'REST là tập ràng buộc: stateless, cacheable, uniform interface, layered system. JSON chỉ là một định dạng thường dùng.'],
-  ['GraphQL thay thế REST', 'GraphQL là ngôn ngữ truy vấn, REST là phong cách kiến trúc. Nhiều hệ thống chạy cả hai.'],
-  ['SOAP đã chết', 'SOAP vẫn sống trong ngân hàng, bảo hiểm, ERP và nơi cần WS-Security hoặc hợp đồng liên tổ chức.'],
+  ['gRPC nhanh nhất nên luôn là lựa chọn hàng đầu', 'gRPC tối ưu trong mạng nội bộ. Khi ra Internet công cộng, khả năng caching ở CDN, Proxy và tính đơn giản của HTTP REST mới là yếu tố quyết định.'],
+  ['REST đơn thuần chỉ là JSON truyền qua HTTP', 'REST là một phong cách kiến trúc với các ràng buộc khắt khe: Stateless, Cacheable, Uniform Interface, Layered System. JSON chỉ là định dạng truyền dữ liệu phổ biến.'],
+  ['GraphQL ra đời để thay thế hoàn toàn REST', 'GraphQL là ngôn ngữ truy vấn dữ liệu, còn REST là phong cách kiến trúc API. Trong nhiều hệ thống thực tế, cả hai được phối hợp sử dụng hiệu quả.'],
+  ['SOAP là công nghệ đã lạc hậu và không còn dùng', 'SOAP vẫn đóng vai trò trụ cột trong ngành Ngân hàng, Tài chính, Bảo hiểm và ERP – những nơi đặt tiêu chí bảo mật WS-Security và hợp đồng WSDL lên hàng đầu.'],
 ]
 
 function getRecommendation(selections) {
@@ -247,10 +263,10 @@ function App() {
               API Architecture Lab
             </p>
             <h1 className="mt-3 max-w-3xl text-4xl font-black leading-tight text-slate-950 sm:text-5xl">
-              Học nhanh SOAP, REST, GraphQL và gRPC qua ví dụ Student Management
+              Phân tích & So sánh SOAP, REST, GraphQL và gRPC qua bài toán Quản lý Sinh viên
             </h1>
             <p className="mt-4 max-w-2xl text-base leading-7 text-slate-600">
-              Không có kiến trúc API tốt nhất cho mọi trường hợp. Hãy nhìn vào client, mạng, hợp đồng và kỹ năng đội ngũ để chọn phương án phù hợp.
+              Không có kiến trúc API duy nhất tối ưu cho mọi ứng dụng. Quyết định phù hợp dựa trên đối tượng Client, hạ tầng mạng, quy chuẩn Contract và năng lực đội ngũ.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               {architectures.map((item) => (
@@ -309,11 +325,11 @@ function App() {
 
             <div className="mt-6 grid gap-4">
               <div>
-                <h3 className="text-sm font-black uppercase tracking-[0.16em] text-slate-500">Nên dùng khi</h3>
+                <h3 className="text-sm font-black uppercase tracking-[0.16em] text-slate-500">Trường hợp sử dụng (Best For)</h3>
                 <p className="mt-2 text-base leading-7 text-slate-800">{active.bestFor}</p>
               </div>
               <div>
-                <h3 className="text-sm font-black uppercase tracking-[0.16em] text-slate-500">Đánh đổi</h3>
+                <h3 className="text-sm font-black uppercase tracking-[0.16em] text-slate-500">Nhược điểm & Đánh đổi (Trade-offs)</h3>
                 <p className="mt-2 text-base leading-7 text-slate-800">{active.tradeoff}</p>
               </div>
             </div>
@@ -339,11 +355,11 @@ function App() {
         <div className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-700">So sánh nhanh</p>
-              <h2 className="mt-2 text-3xl font-black text-slate-950">Cùng một tiêu chí, bốn cách giải</h2>
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-700">Bảng So sánh Tổng quan</p>
+              <h2 className="mt-2 text-3xl font-black text-slate-950">So sánh chi tiết theo các tiêu chí kỹ thuật</h2>
             </div>
             <p className="max-w-xl text-sm leading-6 text-slate-600">
-              Dùng bảng này để nhớ sự khác biệt cốt lõi trước khi đi vào lập luận chọn kiến trúc.
+              Tổng hợp những điểm khác biệt cốt lõi giữa 4 kiến trúc API phổ biến nhất hiện nay.
             </p>
           </div>
 
@@ -377,10 +393,10 @@ function App() {
 
       <section className="mx-auto grid max-w-7xl gap-6 px-5 py-8 sm:px-8 lg:grid-cols-[0.95fr_1.05fr]">
         <article className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-700">Decision demo</p>
-          <h2 className="mt-2 text-3xl font-black text-slate-950">Chọn kiến trúc theo ràng buộc</h2>
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-700">Tư vấn Kiến trúc</p>
+          <h2 className="mt-2 text-3xl font-black text-slate-950">Lựa chọn kiến trúc phù hợp với nhu cầu</h2>
           <p className="mt-3 text-base leading-7 text-slate-600">
-            Bốn câu hỏi hay quyết định kiến trúc: ai là client, API chạy trên mạng nào, ai giữ hợp đồng, và đội có vận hành nổi không.
+            4 yếu tố quyết định: Đối tượng client, môi trường mạng truyền tải, cơ chế hợp đồng dữ liệu và năng lực vận hành.
           </p>
 
           <div className="mt-6 grid gap-5">
@@ -410,13 +426,13 @@ function App() {
 
         <article className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className={`h-2 rounded-full bg-gradient-to-r ${recommendation.color}`} />
-          <p className="mt-5 text-sm font-bold uppercase tracking-[0.2em] text-slate-500">Gợi ý hiện tại</p>
+          <p className="mt-5 text-sm font-bold uppercase tracking-[0.2em] text-slate-500">Kiến trúc đề xuất</p>
           <h2 className="mt-2 text-4xl font-black text-slate-950">{recommendation.name}</h2>
           <p className="mt-3 text-base leading-7 text-slate-700">{recommendation.bestFor}</p>
           <div className="mt-5 rounded-lg bg-slate-50 p-4">
-            <h3 className="text-sm font-black uppercase tracking-[0.16em] text-slate-500">Nhớ câu này</h3>
+            <h3 className="text-sm font-black uppercase tracking-[0.16em] text-slate-500">Thông điệp cốt lõi</h3>
             <p className="mt-2 text-lg font-bold leading-7 text-slate-950">
-              Chọn kiến trúc API là chọn ràng buộc, không phải chọn công nghệ cho mới.
+              Lựa chọn kiến trúc API là chấp nhận các ràng buộc kỹ thuật phù hợp, không phải chạy theo xu hướng công nghệ.
             </p>
           </div>
         </article>
@@ -424,16 +440,16 @@ function App() {
 
       <section className="border-y border-slate-200 bg-white">
         <div className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-700">Case study</p>
-          <h2 className="mt-2 text-3xl font-black text-slate-950">Student Management System: REST ra ngoài, gRPC vào trong</h2>
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-700">Thực tế Triển khai (Case Study)</p>
+          <h2 className="mt-2 text-3xl font-black text-slate-950">Hệ thống Quản lý Sinh viên: REST cho Bên ngoài (Client), gRPC cho Nội bộ (Microservices)</h2>
 
           <div className="mt-6 grid gap-4 lg:grid-cols-5">
             {[
-              ['Web / Mobile', 'Sinh viên, giảng viên, phòng đào tạo'],
-              ['API Gateway', 'HTTPS, REST/JSON, JWT, rate limit, ETag'],
-              ['Services nội bộ', 'Student, Enrollment, Grading'],
-              ['gRPC HTTP/2', 'Trao đổi nhanh trong mạng tin cậy'],
-              ['Database / Adapter', 'PostgreSQL, Redis, SOAP adapter cho ngân hàng'],
+              ['Web / Mobile Client', 'Giao diện Sinh viên, Giảng viên & Quản trị viên'],
+              ['API Gateway', 'Xử lý HTTPS, REST/JSON, JWT Auth, Rate Limiting & ETag'],
+              ['Internal Services', 'Các dịch vụ nội bộ: Student, Enrollment, Grading'],
+              ['gRPC (HTTP/2)', 'Giao tiếp tốc độ cao giữa các Microservices trong mạng nội bộ'],
+              ['Database & Adapter', 'Lưu trữ PostgreSQL, Redis và SOAP Adapter kết nối ngân hàng'],
             ].map((step, index) => (
               <div key={step[0]} className="relative rounded-xl border border-slate-200 bg-slate-50 p-4">
                 <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-950 text-sm font-black text-white">
@@ -450,10 +466,10 @@ function App() {
       <section className="mx-auto max-w-7xl px-5 py-8 sm:px-8">
         <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
           <article>
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-700">Lỗi lập luận</p>
-            <h2 className="mt-2 text-3xl font-black text-slate-950">Những câu dễ nói sai khi so sánh API</h2>
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-emerald-700">Góc nhìn & Hiểu lầm</p>
+            <h2 className="mt-2 text-3xl font-black text-slate-950">Giải mã các quan niệm chưa chính xác về API</h2>
             <p className="mt-3 text-base leading-7 text-slate-600">
-              Khi bảo vệ lựa chọn, phần quan trọng nhất là nói rõ mình được gì, mất gì, và sẽ giảm rủi ro bằng cách nào.
+              Khi đề xuất kiến trúc, yếu tố quan trọng là phân tích rõ ưu điểm, nhược điểm và phương án tối ưu rủi ro vận hành.
             </p>
           </article>
 
