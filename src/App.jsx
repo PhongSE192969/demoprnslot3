@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-
+// eslint-disable-next-line import/no-unresolved
 const architectures = [
   {
     id: 'soap',
